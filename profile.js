@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("phone").textContent = user.phone;
 
   // Load watch history
-  fetch(`http://localhost:5000/api/history/${user._id}`)
+  fetch(`https://cinestream-v1sy.onrender.com/api/history/${user._id}`)
     .then((res) => res.json())
     .then((data) => {
       const container = document.getElementById("watch-history");

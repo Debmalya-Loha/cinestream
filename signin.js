@@ -6,7 +6,7 @@ document.getElementById('signin-form').addEventListener('submit', async function
   const password = form.password.value;
 
   try {
-    const res = await fetch('http://localhost:5000/api/auth/signin', {
+    const res = await fetch('https://cinestream-v1sy.onrender.com/api/auth/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone: mobile, password })

@@ -19,7 +19,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
   }
 
   try {
-    const response = await fetch('http://localhost:5000/api/auth/signup', {
+    const response = await fetch('https://cinestream-v1sy.onrender.com/api/auth/signup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name, email, phone, password })

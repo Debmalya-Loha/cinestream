@@ -270,7 +270,7 @@ document.addEventListener('click', async function (e) {
     const movie = await res.json();
 
     // ✅ Send to backend to save watch history
-    await fetch(`http://localhost:5000/api/history/${user._id}`, {
+    await fetch(`https://cinestream-v1sy.onrender.com/api/history/${user._id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

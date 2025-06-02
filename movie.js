@@ -76,7 +76,7 @@ async function saveWatchHistory(movie) {
   if (!user || !user._id) return;
 
   try {
-    await fetch(`http://localhost:5000/api/history/${user._id}`, {
+    await fetch(`https://cinestream-v1sy.onrender.com/api/history/${user._id}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
