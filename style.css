@@ -1,0 +1,414 @@
+/* Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+  --main-color: #ff2c1f;
+  --text-color: #fff;
+  --bg-color: #0c0c0c;
+  --light-bg: #1e1e1e;
+  --hover-color: #ff543f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* Header */
+header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 10px 10%;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  transition: 0.3s;
+}
+
+header.shadow {
+  background: var(--light-bg);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--main-color);
+  text-decoration: none;
+}
+
+.navbar {
+  display: flex;
+  gap: 20px;
+}
+
+.navbar li {
+  list-style: none;
+}
+
+.navbar a {
+  text-decoration: none;
+  color: var(--text-color);
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.navbar a:hover,
+.navbar .home-active {
+  color: var(--main-color);
+}
+
+#menu-icon {
+  display: none;
+  font-size: 28px;
+  color: var(--text-color);
+  cursor: pointer;
+}
+
+.btn {
+  padding: 8px 18px;
+  background: var(--main-color);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  background: var(--hover-color);
+}
+
+/* Hero Slider */
+.home {
+  margin-top: 80px;
+}
+
+.home .swiper-slide {
+  position: relative;
+  min-height: 450px;
+  background: #000;
+}
+
+.home .swiper-slide img {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  opacity: 0.5;
+}
+
+.home-text {
+  position: absolute;
+  bottom: 20%;
+  left: 10%;
+  color: var(--text-color);
+}
+
+.home-text span {
+  font-size: 18px;
+  color: var(--main-color);
+}
+
+.home-text h1 {
+  font-size: 36px;
+  margin: 10px 0;
+}
+
+.play {
+  margin-left: 20px;
+  font-size: 24px;
+  color: var(--main-color);
+}
+
+/* Section headings */
+.heading {
+  text-align: center;
+  font-size: 30px;
+  margin: 60px 0 30px;
+}
+
+/* Movies Grid */
+.movies-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    padding: 0 20px;
+}
+
+.box {
+  background: var(--light-bg);
+  padding: 10px;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+.box:hover {
+  transform: scale(1.03);
+  background-color: #333;
+}
+
+.box-img {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 6px;
+}
+
+.box-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.4s;
+}
+
+.box h3 {
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.box span {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Coming Soon */
+.coming-container {
+  padding: 0 10%;
+  margin-bottom: 40px;
+}
+
+.coming-container .box {
+  background: var(--light-bg);
+  border-radius: 8px;
+  padding: 10px;
+  text-align: center;
+}
+
+/* Newsletter */
+.newsletter {
+  background: var(--light-bg);
+  padding: 40px 10%;
+  text-align: center;
+}
+
+.newsletter h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.newsletter form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.newsletter input.email {
+  padding: 10px;
+  width: 100%;
+  max-width: 400px;
+  border-radius: 5px;
+  border: none;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 30px 10%;
+  background: var(--light-bg);
+}
+
+.footer .social {
+  margin-top: 10px;
+}
+
+.footer .social a {
+  margin: 0 8px;
+  font-size: 20px;
+  color: var(--text-color);
+  transition: 0.3s;
+}
+
+.footer .social a:hover {
+  color: var(--main-color);
+}
+
+.copyright {
+  background: #111;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  header {
+    padding: 15px 5%;
+  }
+
+  .movies-container {
+    padding: 0 5%;
+  }
+
+  .coming-container {
+    padding: 0 5%;
+  }
+
+  .newsletter {
+    padding: 30px 5%;
+  }
+}
+
+@media (max-width: 768px) {
+  #menu-icon {
+    display: block;
+  }
+
+  .navbar {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: var(--light-bg);
+    flex-direction: column;
+    align-items: center;
+    display: none;
+  }
+
+  .navbar.active {
+    display: flex;
+  }
+
+  .home-text h1 {
+    font-size: 28px;
+  }
+
+  .movies-container {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+
+  .box-img {
+    height: 200px;
+  }
+}
+
+
+.search-box {
+  text-align: center;
+}
+
+.search-box form {
+  display: inline-flex;
+  padding: 8px 12px;
+  border-radius: 30px;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  width: 220px;
+  border-radius: 5px;
+}
+
+.search-box .btn {
+  border-radius: 5px;
+  padding: 0.6rem 1.2rem;
+}
+
+.search-info {
+  text-align: center;
+  font-size: 1rem;
+  margin: 1rem 0;
+  color: #ccc;
+}
+
+
+.video-container {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  margin: auto;
+  padding-top: 20px;
+}
+
+#fullscreenBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff2c1f;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.movie-details {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 1rem;
+  color: white;
+}
+
+.movie-details h1 {
+  margin-bottom: 10px;
+}
+
+
+.back-btn {
+  display: inline-block;
+  position: fixed;
+  margin-top: 75px;
+  margin-left: 1340px;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #ff2c1f;
+  background: #111;
+  padding: 8px 14px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.back-btn:hover {
+  background: #ff2c1f;
+  color: #fff;
+}
+
+
+.recommended {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.recommended h2 {
+  margin-bottom: 20px;
+  color: #ff4c4c;
+  font-size: 1.6rem;
+}
+
+

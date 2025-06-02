@@ -1,0 +1,87 @@
+body {
+    background-color: #000;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .auth-container {
+    background-color: #111;
+    padding: 40px;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 0 15px rgba(255, 71, 71, 0.3);
+    text-align: center;
+  }
+  
+  .auth-container h2 {
+    margin-bottom: 20px;
+    color: #ff4747;
+  }
+  
+  .auth-container form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .auth-container input {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  .auth-container button {
+    background-color: #ff4747;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .auth-container button:hover {
+    background-color: #e63c3c;
+  }
+  
+  .auth-footer {
+    margin-top: 15px;
+  }
+  
+  .auth-footer a {
+    color: #ff4747;
+    text-decoration: none;
+  }
+
+  .back-btn {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #ff4747;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .back-btn:hover {
+    text-decoration: underline;
+  }
+  
+
+  #profile-icon {
+  background-color: #e50914;
+  color: white;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  text-align: center;
+  line-height: 35px;
+  font-weight: bold;
+}
+

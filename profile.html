@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Profile - CineStream</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #000;
+      color: #fff;
+    }
+
+    .profile-container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .profile-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background-color: red;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .profile-info h2 {
+      margin: 0;
+      font-size: 26px;
+    }
+
+    .profile-info p {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #ccc;
+    }
+
+    .section-title {
+      margin: 30px 0 10px;
+      font-size: 20px;
+      font-weight: bold;
+      border-bottom: 1px solid #444;
+      padding-bottom: 5px;
+    }
+
+    .watch-history {
+      display: flex;
+      gap: 15px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+
+    .watch-history::-webkit-scrollbar {
+      height: 6px;
+    }
+
+    .watch-history::-webkit-scrollbar-thumb {
+      background: #888;
+      border-radius: 4px;
+    }
+
+    .movie-card {
+      background: #111;
+      border-radius: 8px;
+      width: 160px;
+      flex: 0 0 auto;
+      text-align: center;
+    }
+
+    .movie-card img {
+      width: 100%;
+      border-radius: 8px 8px 0 0;
+    }
+
+    .movie-card p {
+      margin: 10px;
+      font-size: 14px;
+    }
+
+    .footer-buttons {
+      margin-top: 30px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .signout-btn {
+      background-color: #e50914;
+      color: #fff;
+    }
+
+    .help-btn {
+      background-color: #333;
+      color: #ccc;
+    }
+
+    .back-btn {
+  display: inline-block;
+  margin: 20px;
+  font-size: 1rem;
+  text-decoration: none;
+  color: #ff2c1f;
+  background: #111;
+  padding: 8px 14px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+.back-btn:hover {
+  background: #ff2c1f;
+  color: #fff;
+}
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back-btn">← Back to Home</a>
+  <div class="profile-container">
+    <div class="profile-header">
+      <div class="profile-icon" id="profile-icon">U</div>
+      <div class="profile-info">
+        <h2 id="username">Username</h2>
+        <p id="email">user@example.com</p>
+        <p id="phone">+1234567890</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Watch History</div>
+      <div class="watch-history" id="watch-history">
+        <!-- Movie cards will be injected dynamically -->
+        <!-- Example:
+        <div class="movie-card">
+          <img src="path/to/image.jpg" alt="Movie Poster">
+          <p>Movie Title</p>
+        </div>
+        -->
+      </div>
+    </div>
+
+    <div class="footer-buttons">
+      <button class="signout-btn" onclick="signOut()">Sign Out</button>
+      <button class="help-btn">Help & Feedback</button>
+    </div>
+  </div>
+
+  <script src="profile.js"></script>
+</body>
+</html>
