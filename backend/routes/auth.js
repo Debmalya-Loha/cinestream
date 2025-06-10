@@ -19,6 +19,24 @@ router.post('/signup', async (req, res) => {
       return res.status(400).json({ message: 'This mobile number is already registered.' });
     }
 
+    //..........
+    const sendOtpEmail = require('../utils/email');
+
+router.post('/send-otp-email', async (req, res) => {
+  const { email } = req.body;
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+  try {
+    await sendOtpEmail(email, otp);
+    req.session.emailOtp = otp;
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Failed to send email OTP", err);
+    res.status(500).json({ success: false, message: 'Failed to send OTP. Try again.' });
+  }
+});
+//.........
+
     const newUser = new User({ name, email, phone, password });
     await newUser.save();
 
