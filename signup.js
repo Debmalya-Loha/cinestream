@@ -8,11 +8,11 @@ document.getElementById('send-email-otp').addEventListener('click', async functi
   }
 
   try {
-    const res = await fetch('https://cinestream-v1sy.onrender.com/api/otp/send-email', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email })
-    });
+    const res = await fetch("https://cinestream-v1sy.onrender.com/api/otp/send-email", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ email, otp }),
+})
 
     const data = await res.json();
     if (res.ok) {
