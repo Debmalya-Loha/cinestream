@@ -1,26 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const sendOtpEmail = require('../utils/email');
-
 const twilio = require('twilio');
 
-// In-memory OTP store
 const otpStore = new Map();
 
-// ===== Send Email OTP using Mailjet =====
-
-// Add this at top if not present
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 router.post('/send-email', async (req, res) => {
   const { email } = req.body;
-
   if (!email) return res.status(400).json({ message: "Email is required" });
 
   const otp = generateOTP();
-  console.log(`📩 Sending email OTP to: ${email}, OTP: ${otp}`);
+  otpStore.set(email, { otp, expires: Date.now() + 5 * 60 * 1000 });
 
   try {
     await sendOtpEmail(email, otp);
@@ -30,19 +24,20 @@ router.post('/send-email', async (req, res) => {
   }
 });
 
-// ===== Send SMS OTP using Twilio =====
-router.post('/send-mobile-otp', async (req, res) => {
+router.post('/phone', async (req, res) => {
   const { phone } = req.body;
+  if (!phone) return res.status(400).json({ message: "Phone number is required" });
+
   const otp = generateOTP();
   otpStore.set(phone, { otp, expires: Date.now() + 5 * 60 * 1000 });
 
-  const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+  const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 
   try {
     await client.messages.create({
       body: `Your CineStream OTP is: ${otp}`,
       from: process.env.TWILIO_PHONE_NUMBER,
-      to: `+91${phone}`  // Assuming Indian numbers
+      to: `+91${phone}`
     });
 
     res.status(200).json({ message: 'Mobile OTP sent successfully' });
@@ -52,17 +47,12 @@ router.post('/send-mobile-otp', async (req, res) => {
   }
 });
 
-// ===== Verify both Email & Phone OTPs =====
 router.post('/verify', (req, res) => {
   const { email, emailOtp, phone, phoneOtp } = req.body;
-
-  if (!email || !emailOtp || !phone || !phoneOtp) {
-    return res.status(400).json({ message: "Missing email/phone or OTPs" });
-  }
+  const now = Date.now();
 
   const storedEmail = otpStore.get(email);
   const storedPhone = otpStore.get(phone);
-  const now = Date.now();
 
   if (
     !storedEmail || !storedPhone ||
@@ -76,4 +66,4 @@ router.post('/verify', (req, res) => {
   res.json({ message: "OTP verified" });
 });
 
-module.exports = { router, otpStore };
+module.exports = router;

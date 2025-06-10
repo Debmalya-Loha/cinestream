@@ -13,15 +13,10 @@ async function sendOtpEmail(to, otp) {
         Messages: [
           {
             From: {
-              Email: "debmalya811@gmail.com", // ✅ Must be verified in Mailjet
+              Email: "debmalya811@gmail.com",
               Name: "CineStream"
             },
-            To: [
-              {
-                Email: to,
-                Name: "User"
-              }
-            ],
+            To: [{ Email: to, Name: "User" }],
             Subject: "CineStream Email OTP",
             TextPart: `Your CineStream OTP is: ${otp}`,
             HTMLPart: `<h3>Your CineStream OTP is: <strong>${otp}</strong></h3>`

@@ -3,9 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const authRoutes = require("./routes/auth"); // ⬅️ router function import
+
+const authRoutes = require("./routes/auth");
 const userRoutes = require('./routes/user');
 const otpRoutes = require('./routes/otp');
+const historyRoutes = require('./routes/history');
 
 const app = express();
 
@@ -15,7 +17,7 @@ app.use(bodyParser.json());
 
 // ✅ MongoDB Atlas connection using Mongoose
 mongoose.connect(
-  "mongodb+srv://debmalya99:Debmaly%4099@cluster0.njjk6ti.mongodb.net/cinesteam?retryWrites=true&w=majority",
+  process.env.MONGO_URI,
   {
     useNewUrlParser: true,
     useUnifiedTopology: true
@@ -26,10 +28,13 @@ mongoose.connect(
   console.error("❌ MongoDB connection error:", err);
 });
 
-// Route binding
+// Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/history", historyRoutes);
+app.use("/api/otp", otpRoutes); // ✅ Corrected this line
 
-// Test route (optional)
+// Test route
 app.get("/", (req, res) => {
   res.send("🎬 Cinesteam backend is live!");
 });
@@ -37,12 +42,5 @@ app.get("/", (req, res) => {
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
-
-// To fetch user info & history
-app.use('/api/history', require('./routes/history'));
-app.use('/api/user', require('./routes/user')); // <== should match user.js
-
-// For otp verification
-app.use('/api/otp', otpRoutes.router);
