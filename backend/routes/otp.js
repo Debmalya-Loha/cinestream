@@ -9,6 +9,7 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
+// Send Email OTP
 router.post('/send-email', async (req, res) => {
   const { email } = req.body;
   if (!email) return res.status(400).json({ message: "Email is required" });
@@ -24,6 +25,7 @@ router.post('/send-email', async (req, res) => {
   }
 });
 
+// Send SMS OTP
 router.post('/phone', async (req, res) => {
   const { phone } = req.body;
   if (!phone) return res.status(400).json({ message: "Phone number is required" });
@@ -47,23 +49,32 @@ router.post('/phone', async (req, res) => {
   }
 });
 
-router.post('/verify', (req, res) => {
-  const { email, emailOtp, phone, phoneOtp } = req.body;
+// Verify Email OTP
+router.post('/verify-email', (req, res) => {
+  const { email, emailOtp } = req.body;
   const now = Date.now();
+  const stored = otpStore.get(email);
 
-  const storedEmail = otpStore.get(email);
-  const storedPhone = otpStore.get(phone);
-
-  if (
-    !storedEmail || !storedPhone ||
-    storedEmail.otp !== emailOtp || storedPhone.otp !== phoneOtp ||
-    storedEmail.expires < now || storedPhone.expires < now
-  ) {
-    return res.status(401).json({ message: "Invalid or expired OTPs" });
+  if (!stored || stored.otp !== emailOtp || stored.expires < now) {
+    return res.status(401).json({ message: "Invalid or expired email OTP" });
   }
 
-  otpStore.set(`${email}:${phone}`, { verified: true });
-  res.json({ message: "OTP verified" });
+  otpStore.set(email, { ...stored, verified: true });
+  res.json({ message: "Email OTP verified" });
+});
+
+// Verify Phone OTP
+router.post('/verify-phone', (req, res) => {
+  const { phone, phoneOtp } = req.body;
+  const now = Date.now();
+  const stored = otpStore.get(phone);
+
+  if (!stored || stored.otp !== phoneOtp || stored.expires < now) {
+    return res.status(401).json({ message: "Invalid or expired phone OTP" });
+  }
+
+  otpStore.set(phone, { ...stored, verified: true });
+  res.json({ message: "Phone OTP verified" });
 });
 
 module.exports = router;

@@ -1,158 +1,110 @@
-// ====== EMAIL OTP SENDER ======
-document.getElementById('send-email-otp').addEventListener('click', async function () {
-  const email = document.querySelector('input[name="email"]').value;
+const baseURL = 'https://cinestream-v1sy.onrender.com/api';
 
-  if (!email) {
-    alert("❗ Please enter your email first.");
-    return;
-  }
+document.getElementById('send-email-otp').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
 
   try {
-    const res = await fetch("https://cinestream-v1sy.onrender.com/api/otp/send-email", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ email, otp }),
-})
-
-    const data = await res.json();
-    if (res.ok) {
-      alert("✅ OTP sent to your email.");
-    } else {
-      alert("❌ " + data.message);
-    }
+    const response = await fetch(`${baseURL}/otp/send-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await response.json();
+    alert(data.message);
   } catch (err) {
-    console.error(err);
-    alert("❌ Failed to send OTP. Try again.");
+    alert("❌ Failed to send email OTP");
   }
 });
 
-// ====== SMS OTP SENDER ======
-document.getElementById('send-sms-otp').addEventListener('click', async function () {
-  const phone = document.querySelector('input[name="mobile"]').value;
-
-  if (!phone) {
-    alert("❗ Please enter your mobile number first.");
-    return;
-  }
+document.getElementById('verify-email-otp').addEventListener('click', async () => {
+  const email = document.getElementById('email').value;
+  const emailOtp = document.getElementById('emailOtp').value;
 
   try {
-    const res = await fetch('https://cinestream-v1sy.onrender.com/api/otp/phone', {
+    const response = await fetch(`${baseURL}/otp/verify-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, emailOtp })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("✅ Email OTP verified");
+    } else {
+      alert("❌ Failed to verify email OTP");
+    }
+  } catch (err) {
+    alert("❌ Error verifying email OTP");
+  }
+});
+
+document.getElementById('send-sms-otp').addEventListener('click', async () => {
+  const phone = document.getElementById('mobile').value;
+
+  try {
+    const response = await fetch(`${baseURL}/otp/phone`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ phone })
     });
-
-    const data = await res.json();
-    if (res.ok) {
-      alert("✅ OTP sent to your phone.");
-    } else {
-      alert("❌ " + data.message);
-    }
+    const data = await response.json();
+    alert(data.message);
   } catch (err) {
-    console.error(err);
-    alert("❌ Failed to send mobile OTP. Try again.");
+    alert("❌ Failed to send mobile OTP");
   }
 });
 
-//........
-let otpVerified = false;
-
-document.getElementById('signup-form').addEventListener('submit', async function (e) {
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const form = e.target;
-  const name = form.username?.value;
-  const email = form.email?.value;
-  const phone = form.mobile?.value;
-  const password = form.password?.value;
-  const confirm = form.confirm?.value;
-  const emailOtp = form.emailOtp?.value;
-  const phoneOtp = form.smsOtp?.value;
-
-  if (!otpVerified) {
-    try {
-      const res = await fetch('https://cinestream-v1sy.onrender.com/api/otp/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, emailOtp, phone, phoneOtp })
-      });
-
-      const data = await res.json();
-      if (!res.ok) return alert("❌ OTP verification failed: " + data.message);
-
-      otpVerified = true;
-      alert("✅ OTP verified. Now submitting registration...");
-    } catch (err) {
-      alert("Server error during OTP verification.");
-      return;
-    }
-  }
+  const username = document.getElementById('username').value;
+  const email = document.getElementById('email').value;
+  const emailOtp = document.getElementById('emailOtp').value;
+  const phone = document.getElementById('mobile').value;
+  const phoneOtp = document.getElementById('smsOtp').value;
+  const password = document.getElementById('password').value;
+  const confirm = document.getElementById('confirm').value;
 
   if (password !== confirm) {
-    alert("Passwords do not match.");
-    return;
+    return alert("❌ Passwords do not match");
   }
 
-  // Now submit registration
+  // Step 1: Verify Email OTP
+  const emailRes = await fetch(`${baseURL}/otp/verify-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, emailOtp })
+  });
+  if (!emailRes.ok) {
+    return alert("❌ Email OTP verification failed");
+  }
+
+  // Step 2: Verify Phone OTP
+  const phoneRes = await fetch(`${baseURL}/otp/verify-phone`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phone, phoneOtp })
+  });
+  if (!phoneRes.ok) {
+    return alert("❌ Phone OTP verification failed");
+  }
+
+  // Step 3: Create account
   try {
-    const response = await fetch('https://cinestream-v1sy.onrender.com/api/auth/signup', {
+    const signupRes = await fetch(`${baseURL}/auth/signup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password })
+      body: JSON.stringify({ username, email, mobile: phone, password })
     });
 
-    const data = await response.json();
-    if (response.ok) {
-      alert("✅ Registered successfully!");
-      window.location.href = 'signin.html';
+    const signupData = await signupRes.json();
+    if (signupRes.ok) {
+      alert("✅ Account created successfully!");
+      window.location.href = "signin.html";
     } else {
-      alert("❌ " + data.message);
+      alert(`❌ ${signupData.message}`);
     }
   } catch (err) {
-    alert("Server error. Please try again.");
-    console.error(err);
-  }
-});
-//........
-
-// ====== FORM SUBMIT HANDLER ======
-document.getElementById('signup-form').addEventListener('submit', async function (e) {
-  e.preventDefault();
-
-  const form = e.target;
-  const name = form.username?.value;
-  const email = form.email?.value;
-  const phone = form.mobile?.value;
-  const password = form.password?.value;
-  const confirm = form.confirm?.value;
-
-  if (!name || !email || !phone || !password || !confirm) {
-    alert("Please fill out all fields.");
-    return;
-  }
-
-  if (password !== confirm) {
-    alert("Passwords do not match.");
-    return;
-  }
-
-  try {
-    const response = await fetch('https://cinestream-v1sy.onrender.com/api/auth/signup', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, email, phone, password })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      alert("✅ Registered successfully!");
-      window.location.href = 'signin.html';
-    } else {
-      alert("❌ " + data.message);
-    }
-  } catch (err) {
-    alert("Server error. Please try again.");
-    console.error(err);
+    alert("❌ Signup failed");
   }
 });
