@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Set user profile details
-  document.getElementById("profile-icon").textContent = user.name[0].toUpperCase();
-  document.getElementById("username").textContent = user.name;
+  document.getElementById("profile-icon").textContent = user.username[0].toUpperCase();
+  document.getElementById("username").textContent = user.username;
   document.getElementById("email").textContent = user.email;
   document.getElementById("phone").textContent = user.phone;
 
