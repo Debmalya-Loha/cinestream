@@ -2,14 +2,14 @@ document.getElementById('signin-form').addEventListener('submit', async function
   e.preventDefault();
 
   const form = e.target;
-  const username = form.username.value;
+  const email = form.email.value;
   const password = form.password.value;
 
   try {
     const res = await fetch('https://cinestream-v1sy.onrender.com/api/auth/signin', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ email, password })
     });
 
     const data = await res.json();
