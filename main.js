@@ -28,31 +28,25 @@ fetch(`https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}&language
       const slide = document.createElement('div');
       slide.className = 'swiper-slide container';
       slide.innerHTML = `
-  <a href="movie.html?id=${movie.id}">
-    <img src="${imageBase}original${movie.backdrop_path}" alt="${movie.title}" />
-    <div class="home-text">
-      <span>Now Playing</span>
-      <h1>${movie.title}</h1>
-      <div class="btn">Watch Now</div>
-      <div class="play"><i class='bx bx-play'></i></div>
-    </div>
-  </a>
-`;
+        <a href="movie.html?id=${movie.id}">
+          <img src="${imageBase}original${movie.backdrop_path}" alt="${movie.title}" />
+          <div class="home-text">
+            <span>Now Playing</span>
+            <h1>${movie.title}</h1>
+            <div class="btn">Watch Now</div>
+            <div class="play"><i class='bx bx-play'></i></div>
+          </div>
+        </a>
+      `;
       sliderWrapper.appendChild(slide);
     });
 
     new Swiper(".home", {
       spaceBetween: 30,
       centeredSlides: true,
-      autoplay: {
-        delay: 4000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      loop: true,
+      autoplay: { delay: 4000, disableOnInteraction: false },
+      pagination: { el: ".swiper-pagination", clickable: true },
+      loop: true
     });
   })
   .catch(err => console.error('Slider error:', err));
@@ -82,16 +76,15 @@ function loadMovies(page = 1, reset = false) {
     .then(data => {
       data.results.forEach(movie => {
         const movieBox = document.createElement('a');
-movieBox.href = `movie.html?id=${movie.id}`;
-movieBox.classList.add('box');
-movieBox.innerHTML = `
-  <div class="box-img">
-    <img src="${imageBase}w500${movie.poster_path}" alt="${movie.title}" />
-  </div>
-  <h3>${movie.title}</h3>
-  <span>${movie.release_date} | Rating: ${movie.vote_average}</span>
-`;
-
+        movieBox.href = `movie.html?id=${movie.id}`;
+        movieBox.classList.add('box');
+        movieBox.innerHTML = `
+          <div class="box-img">
+            <img src="${imageBase}w500${movie.poster_path}" alt="${movie.title}" />
+          </div>
+          <h3>${movie.title}</h3>
+          <span>${movie.release_date} | Rating: ${movie.vote_average}</span>
+        `;
         movieContainer.appendChild(movieBox);
       });
 
@@ -101,11 +94,8 @@ movieBox.innerHTML = `
     })
     .catch(err => console.error('Popular movies error:', err));
 }
-
-// Load first batch on page load
 loadMovies(currentPage);
 
-// Load More button
 loadMoreBtn.addEventListener('click', () => {
   currentPage++;
   loadMovies(currentPage);
@@ -133,23 +123,12 @@ fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&language=en
       spaceBetween: 20,
       loop: true,
       centeredSlides: true,
-      autoplay: {
-        delay: 2500,
-        disableOnInteraction: false,
-      },
+      autoplay: { delay: 2500, disableOnInteraction: false },
       breakpoints: {
-        320: {
-          slidesPerView: 2,
-        },
-        568: {
-          slidesPerView: 3,
-        },
-        768: {
-          slidesPerView: 4,
-        },
-        1024: {
-          slidesPerView: 5,
-        }
+        320: { slidesPerView: 2 },
+        568: { slidesPerView: 3 },
+        768: { slidesPerView: 4 },
+        1024: { slidesPerView: 5 }
       }
     });
   })
@@ -158,18 +137,12 @@ fetch(`https://api.themoviedb.org/3/movie/upcoming?api_key=${apiKey}&language=en
 // ===== Search Movies =====
 const searchForm = document.getElementById('searchForm');
 const searchInput = document.getElementById('searchInput');
-
 searchForm.addEventListener('submit', function (e) {
   e.preventDefault();
   const query = searchInput.value.trim();
-
   document.getElementById("movies").scrollIntoView({ behavior: "smooth" });
-
-  if (query) {
-    searchMovies(query);
-  } else {
-    loadMovies(1, true);
-  }
+  if (query) searchMovies(query);
+  else loadMovies(1, true);
 });
 
 function searchMovies(query) {
@@ -182,7 +155,6 @@ function searchMovies(query) {
     .then(res => res.json())
     .then(data => {
       movieContainer.innerHTML = '';
-
       if (!data.results.length) {
         movieContainer.innerHTML = '<p>No results found.</p>';
         return;
@@ -208,18 +180,15 @@ function searchMovies(query) {
     });
 }
 
-// ===== Scroll Spy: Highlight Active Navbar Link =====
+// ===== Scroll Spy =====
 const sections = document.querySelectorAll('section');
 const navLinks = document.querySelectorAll('.navbar a');
-
 window.addEventListener('scroll', () => {
   let scrollY = window.pageYOffset;
-
   sections.forEach(sec => {
     let top = sec.offsetTop - 100;
     let height = sec.offsetHeight;
     let id = sec.getAttribute('id');
-
     if (scrollY >= top && scrollY < top + height) {
       navLinks.forEach(link => {
         link.classList.remove('home-active');
@@ -231,14 +200,13 @@ window.addEventListener('scroll', () => {
   });
 });
 
-//Sign in er jaigai user icon dekhano
-
+// ===== Sign In → Profile Icon =====
 window.addEventListener('DOMContentLoaded', () => {
   const user = JSON.parse(localStorage.getItem('user'));
   const authBtn = document.getElementById('auth-button');
 
-  if (user && authBtn) {
-    const initial = user.name[0].toUpperCase();
+  if (user && authBtn && user.username) {
+    const initial = user.username[0]?.toUpperCase() || "U";
     authBtn.innerHTML = `<div id="profile-icon">${initial}</div>`;
     authBtn.href = "profile.html";
   } else if (authBtn) {
@@ -247,10 +215,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ===== Handle All Movie Poster Clicks for Auth Check + Watch History =====
+// ===== Poster Click Auth + Save Watch History =====
 document.addEventListener('click', async function (e) {
   const poster = e.target.closest('a');
-
   if (!poster || !poster.href.includes('movie.html')) return;
   e.preventDefault();
 
@@ -264,12 +231,10 @@ document.addEventListener('click', async function (e) {
     return;
   }
 
-  // ✅ Fetch minimal movie info using TMDb
   try {
-    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=b0e0abfaa92cc20c336cd4ffe0eb4a58`);
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${movieId}?api_key=${apiKey}`);
     const movie = await res.json();
 
-    // ✅ Send to backend to save watch history
     await fetch(`https://cinestream-v1sy.onrender.com/api/history/${user._id}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -280,11 +245,9 @@ document.addEventListener('click', async function (e) {
         releaseDate: movie.release_date
       })
     });
-
   } catch (err) {
     console.error("❌ Failed to save watch history:", err);
   }
 
-  // ✅ Finally, go to movie page
   window.location.href = poster.href;
 });
