@@ -9,21 +9,27 @@
   <div class="auth-container">
     <a class="back-btn" href="index.html">← Back to Home</a>
     <h2>Sign Up</h2>
+
     <form id="signup-form">
-      <input type="text" name="username" id="username" placeholder="Your Name" required />
-      <input type="email" name="email" id="email" placeholder="Email Address" required />
-      <button type="button" id="send-email-otp">Send OTP to Email</button>
-      <input type="text" name="emailOtp" id="emailOtp" placeholder="Enter Email OTP" required />
-      <button type="button" id="verify-email-otp">Verify Email OTP</button>
+      <input type="text" id="username" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Email Address" required />
+
+      <div class="otp-row">
+        <button type="button" id="send-email-otp">Send OTP</button>
+        <span class="otp-timer" id="otp-timer">5:00</span>
+      </div>
+
+      <input type="text" id="emailOtp" placeholder="Enter Email OTP" required />
+      <button type="button" id="verify-email-otp">Verify OTP</button>
       <span id="email-otp-status"></span>
 
-      <!-- ✅ Keep mobile input, no OTP required -->
-      <input type="tel" name="mobile" id="mobile" placeholder="Mobile Number" required />
+      <input type="tel" id="mobile" placeholder="Mobile Number" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <input type="password" id="confirm" placeholder="Confirm Password" required />
 
-      <input type="password" name="password" id="password" placeholder="Password" required />
-      <input type="password" name="confirm" id="confirm" placeholder="Confirm Password" required />
-      <button type="submit">Register</button>
+      <button type="submit" id="register-btn" disabled>Register</button>
     </form>
+
     <p class="auth-footer">Already have an account? <a href="signin.html">Sign In</a></p>
   </div>
 

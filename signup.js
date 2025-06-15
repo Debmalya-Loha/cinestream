@@ -1,7 +1,48 @@
 const baseURL = 'https://cinestream-v1sy.onrender.com/api';
 
-document.getElementById('send-email-otp').addEventListener('click', async () => {
+const sendBtn = document.getElementById('send-email-otp');
+const verifyBtn = document.getElementById('verify-email-otp');
+const registerBtn = document.querySelector('button[type="submit"]');
+const timerSpan = document.getElementById('otp-timer');
+const statusSpan = document.getElementById('email-otp-status');
+
+let otpVerified = false;
+let otpTimerInterval;
+let timeLeft = 0;
+
+// Initially disable Register
+registerBtn.disabled = true;
+
+// Start OTP Timer
+function startOTPTimer() {
+  clearInterval(otpTimerInterval);
+  timeLeft = 300; // 5 minutes
+  sendBtn.disabled = true;
+  updateTimer();
+
+  otpTimerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+
+    if (timeLeft <= 0) {
+      clearInterval(otpTimerInterval);
+      sendBtn.disabled = false;
+      timerSpan.textContent = "You can resend OTP.";
+    }
+  }, 1000);
+}
+
+// Show countdown
+function updateTimer() {
+  const m = Math.floor(timeLeft / 60);
+  const s = String(timeLeft % 60).padStart(2, '0');
+  timerSpan.textContent = ` (${m}:${s})`;
+}
+
+// Send OTP
+sendBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
+  if (!email) return alert("❗Please enter email first");
 
   try {
     const response = await fetch(`${baseURL}/otp/send-email`, {
@@ -11,14 +52,21 @@ document.getElementById('send-email-otp').addEventListener('click', async () => 
     });
     const data = await response.json();
     alert(data.message);
+    startOTPTimer();
+    otpVerified = false;
+    registerBtn.disabled = true;
+    statusSpan.textContent = '';
   } catch (err) {
     alert("❌ Failed to send email OTP");
   }
 });
 
-document.getElementById('verify-email-otp').addEventListener('click', async () => {
+// Verify OTP
+verifyBtn.addEventListener('click', async () => {
   const email = document.getElementById('email').value;
   const emailOtp = document.getElementById('emailOtp').value;
+
+  if (!email || !emailOtp) return alert("❗Please fill email and OTP");
 
   try {
     const response = await fetch(`${baseURL}/otp/verify-email`, {
@@ -29,8 +77,16 @@ document.getElementById('verify-email-otp').addEventListener('click', async () =
 
     const data = await response.json();
     if (response.ok) {
+      otpVerified = true;
+      registerBtn.disabled = false;
+      statusSpan.textContent = "✅ Verified";
+      statusSpan.style.color = "lightgreen";
       alert("✅ Email OTP verified");
     } else {
+      otpVerified = false;
+      registerBtn.disabled = true;
+      statusSpan.textContent = "❌ Invalid OTP";
+      statusSpan.style.color = "red";
       alert("❌ Failed to verify email OTP");
     }
   } catch (err) {
@@ -38,6 +94,7 @@ document.getElementById('verify-email-otp').addEventListener('click', async () =
   }
 });
 
+// Final Signup Submit
 document.getElementById('signup-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
@@ -48,21 +105,9 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   const password = document.getElementById('password').value;
   const confirm = document.getElementById('confirm').value;
 
-  if (password !== confirm) {
-    return alert("❌ Passwords do not match");
-  }
+  if (!otpVerified) return alert("❌ Please verify your email first");
+  if (password !== confirm) return alert("❌ Passwords do not match");
 
-  // Step 1: Verify Email OTP
-  const emailRes = await fetch(`${baseURL}/otp/verify-email`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, emailOtp })
-  });
-  if (!emailRes.ok) {
-    return alert("❌ Email OTP verification failed");
-  }
-
-  // Step 2: Create account (no phone OTP needed)
   try {
     const signupRes = await fetch(`${baseURL}/auth/signup`, {
       method: 'POST',
