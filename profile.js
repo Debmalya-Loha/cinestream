@@ -7,8 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // Set user profile details
-  document.getElementById("profile-icon").textContent = user.name[0].toUpperCase();
-  document.getElementById("username").textContent = user.name;
+  document.getElementById("profile-icon").textContent = user.username[0].toUpperCase();
+  document.getElementById("username").textContent = user.username;
   document.getElementById("email").textContent = user.email;
   document.getElementById("phone").textContent = user.phone;
 
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((res) => res.json())
     .then((data) => {
       const container = document.getElementById("watch-history");
-      container.innerHTML = ""; // clear previous content if any
+      container.innerHTML = "";
 
       if (!data.history || data.history.length === 0) {
         container.innerHTML = "<p style='color: gray;'>No watch history found.</p>";
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const movieCard = document.createElement("div");
         movieCard.className = "movie-card";
         movieCard.innerHTML = `
-          <img src="${movie.poster}" alt="${movie.title}">
+          <img src="https://image.tmdb.org/t/p/w500${movie.poster_path}" alt="${movie.title}">
           <p>${movie.title}</p>
         `;
         container.appendChild(movieCard);
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Global sign out function so it works with the HTML inline onclick
+// Sign Out
 function signOut() {
   localStorage.removeItem("user");
   window.location.href = "index.html";
