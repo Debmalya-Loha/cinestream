@@ -5,6 +5,8 @@ const verifyBtn = document.getElementById('verify-email-otp');
 const registerBtn = document.querySelector('button[type="submit"]');
 const timerSpan = document.getElementById('otp-timer');
 const statusSpan = document.getElementById('email-otp-status');
+const emailInput = document.getElementById('email');
+const otpInput = document.getElementById('emailOtp');
 
 let otpVerified = false;
 let otpTimerInterval;
@@ -41,7 +43,7 @@ function updateTimer() {
 
 // Send OTP
 sendBtn.addEventListener('click', async () => {
-  const email = document.getElementById('email').value;
+  const email = emailInput.value;
   if (!email) return alert("❗Please enter email first");
 
   try {
@@ -56,6 +58,7 @@ sendBtn.addEventListener('click', async () => {
     otpVerified = false;
     registerBtn.disabled = true;
     statusSpan.textContent = '';
+    statusSpan.style.color = '';
   } catch (err) {
     alert("❌ Failed to send email OTP");
   }
@@ -63,8 +66,8 @@ sendBtn.addEventListener('click', async () => {
 
 // Verify OTP
 verifyBtn.addEventListener('click', async () => {
-  const email = document.getElementById('email').value;
-  const emailOtp = document.getElementById('emailOtp').value;
+  const email = emailInput.value;
+  const emailOtp = otpInput.value;
 
   if (!email || !emailOtp) return alert("❗Please fill email and OTP");
 
@@ -82,6 +85,14 @@ verifyBtn.addEventListener('click', async () => {
       statusSpan.textContent = "✅ Verified";
       statusSpan.style.color = "lightgreen";
       alert("✅ Email OTP verified");
+
+      // Disable fields after verification
+      emailInput.disabled = true;
+      otpInput.disabled = true;
+      sendBtn.disabled = true;
+      verifyBtn.disabled = true;
+      clearInterval(otpTimerInterval);
+      timerSpan.textContent = ""; // Hide timer
     } else {
       otpVerified = false;
       registerBtn.disabled = true;
@@ -99,8 +110,8 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const username = document.getElementById('username').value;
-  const email = document.getElementById('email').value;
-  const emailOtp = document.getElementById('emailOtp').value;
+  const email = emailInput.value;
+  const emailOtp = otpInput.value;
   const phone = document.getElementById('mobile').value;
   const password = document.getElementById('password').value;
   const confirm = document.getElementById('confirm').value;
